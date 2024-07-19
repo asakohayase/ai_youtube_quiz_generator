@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "youtube_quiz_generator"
+version = "0.1.0"
+description = "Youtube Quiz Generator"
+authors = ["Asako Hayase"]
+
+[tool.poetry.dependencies]
+python = ">=3.10.0,<3.12"
+crewai = "^0.1.24"
+unstructured = '==0.10.25'
+#Access weather data
+pyowm = '3.3.0'
+tools = "^0.1.9"
+python-dotenv = "1.0.0"
+
+#For type error check
+tiktoken = "^0.7.0"
+[tool.pyright]
+# https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+useLibraryCodeForTypes = true
+exclude = [".cache"]
+
+#Formatter
+[tool.ruff]
+# https://beta.ruff.rs/docs/configuration/
+select = ['E', 'W', 'F', 'I', 'B', 'C4', 'ARG', 'SIM']
+ignore = ['W291', 'W292', 'W293']
+
+#Declare that poetry is the package manager for this project
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

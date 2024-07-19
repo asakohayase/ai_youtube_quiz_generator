@@ -1,0 +1,36 @@
+# Ignore env files
+.env
+.env.local
+
+# Ignore node_modules folder
+node_modules
+
+# Optional additional ignores
+
+# Ignore npm lock file
+package-lock.json
+
+# Ignore Mac system files
+.DS_Store
+
+# Ignore build output
+dist
+build
+
+# Cache files
+.next/
+cache/
+
+# Ignore log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# Ignore IDE project files
+.idea
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
