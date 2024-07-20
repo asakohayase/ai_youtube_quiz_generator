@@ -96,7 +96,7 @@ def summarize_text(text):
     return " ".join(summaries)
 
 
-def generate_quiz(summary, num_questions=5):
+def generate_quiz(summary, num_questions):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -113,6 +113,20 @@ def generate_quiz(summary, num_questions=5):
     return response.choices[0].message.content
 
 
+def get_num_questions():
+    while True:
+        try:
+            num_questions = int(
+                input("Enter the number of quiz questions you want (1-15): ")
+            )
+            if 1 <= num_questions <= 15:
+                return num_questions
+            else:
+                print("Please enter a number between 1 and 30.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+
 def main():
     video_id = input("Enter the YouTube video ID: ")
     transcript = get_translated_transcript(video_id)
@@ -121,7 +135,8 @@ def main():
         print("\nTranscript retrieved successfully.")
         summary = summarize_text(transcript)
 
-        quiz_json = generate_quiz(summary)
+        num_questions = get_num_questions()
+        quiz_json = generate_quiz(summary, num_questions)
         print("\nGenerated Quiz (in JSON format):")
         print(quiz_json)
 
