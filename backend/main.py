@@ -2,13 +2,33 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import tiktoken
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import uvicorn
 
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
 load_dotenv()
 
+app = FastAPI()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+
+class QuizRequest(BaseModel):
+    video_id: str
+    num_questions: int
+
+
+class QuizQuestion(BaseModel):
+    question: str
+    options: list[str]
+    correct_answer: int
+
+
+class QuizResponse(BaseModel):
+    questions: list[QuizQuestion]
 
 
 def get_translated_transcript(video_id, target_language="en"):
@@ -127,23 +147,48 @@ def get_num_questions():
             print("Please enter a valid number.")
 
 
-def main():
-    video_id = input("Enter the YouTube video ID: ")
-    transcript = get_translated_transcript(video_id)
+# def main():
+#     video_id = input("Enter the YouTube video ID: ")
+#     transcript = get_translated_transcript(video_id)
 
-    if transcript:
-        print("\nTranscript retrieved successfully.")
+#     if transcript:
+#         print("\nTranscript retrieved successfully.")
+#         summary = summarize_text(transcript)
+
+#         num_questions = get_num_questions()
+#         quiz_json = generate_quiz(summary, num_questions)
+#         print("\nGenerated Quiz (in JSON format):")
+#         print(quiz_json)
+
+#         # Note: In a full implementation, you'd parse this JSON and format it nicely for the user
+#     else:
+#         print("Failed to retrieve transcript.")
+
+
+@app.post("/generate-quiz", response_model=QuizResponse)
+async def generate_quiz_endpoint(request: QuizRequest):
+    try:
+        transcript = get_translated_transcript(request.video_id)
+        if not transcript:
+            raise HTTPException(status_code=404, detail="Failed to retrieve transcript")
+
         summary = summarize_text(transcript)
+        quiz_json = generate_quiz(summary, request.num_questions)
 
-        num_questions = get_num_questions()
-        quiz_json = generate_quiz(summary, num_questions)
-        print("\nGenerated Quiz (in JSON format):")
-        print(quiz_json)
+        # Parse the JSON string into a Python object
+        import json
 
-        # Note: In a full implementation, you'd parse this JSON and format it nicely for the user
-    else:
-        print("Failed to retrieve transcript.")
+        quiz_data = json.loads(quiz_json)
+
+        # Convert the parsed data into QuizQuestion objects
+        quiz_questions = [QuizQuestion(**q) for q in quiz_data]
+
+        return QuizResponse(quiz=quiz_questions)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)
