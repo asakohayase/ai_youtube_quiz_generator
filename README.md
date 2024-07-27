@@ -17,8 +17,8 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#built-with">Built With</a></li>
-     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Getting Started</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
   </ol>
 </details>
 
