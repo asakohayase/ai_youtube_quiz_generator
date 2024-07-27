@@ -58,7 +58,7 @@ export default function Home() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="numQuestions">Number of Questions</Label>
-                <Input id="numQuestions" name="numQuestions" type="number" min="1" max="15" required className="text-black text-sm" />
+                <Input id="numQuestions" name="numQuestions" type="number" min="1" max="15" required className="text-gray text-sm" />
               </div>
               
               <Button type="submit" disabled={loading} className="w-full bg-limeGreen text-white">
@@ -91,6 +91,7 @@ export default function Home() {
                       {userAnswers[index] === q.correct_answer ? 'Correct!' : 'Incorrect'}
                     </p>
                   <p>Correct answer: {q.correct_answer}</p>
+                  <p className="mt-1 text-sm text-gray">Explanation: {q.explanation}</p>
                 </div>)}
                </div>
               ))}

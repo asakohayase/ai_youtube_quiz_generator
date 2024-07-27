@@ -31,6 +31,7 @@ class QuizQuestion(BaseModel):
     question: str
     options: list[str]
     correct_answer: str
+    explanation: str
 
 
 class QuizResponse(BaseModel):
@@ -133,7 +134,7 @@ def generate_quiz(summary, num_questions):
                 },
                 {
                     "role": "user",
-                    "content": f"Based on the following summary, create {num_questions} quiz questions with answers. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings), and 'correct_answer' (the description of the correct answer).\n\nSummary: {summary}",
+                    "content": f"Based on the following summary, create {num_questions} quiz questions with answers and explanations. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings),'correct_answer' (the description of the correct answer) , and 'explanation' (an explanation of why the answer is correct).\n\nSummary: {summary}",
                 },
             ],
         )
