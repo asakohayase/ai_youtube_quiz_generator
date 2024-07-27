@@ -6,7 +6,9 @@
   <p>
    Automatically Retrieve, Translate, and Summarize YouTube Transcripts to Generate Engaging Quiz Questions
   </p>
-</div>
+  
+</div><img width="673" alt="Screenshot 2024-07-27 at 6 05 36 PM" src="https://github.com/user-attachments/assets/1dca0458-2b24-49cf-8b01-5790f91fed10">
+
 
 
 
@@ -71,9 +73,9 @@ To use the application, run the .py files:
 <!-- ACKNOWLEDGMENTS -->
 ## Roadmap
  <ol>
-    <li>User Interface Development</li>
-    <li>Interactive Features</li>
-  </ol>
+    <li>Support Other Languages</li>
+    <li>Support Other LLM Models</li>
+ </ol>
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
