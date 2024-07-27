@@ -3,6 +3,10 @@
 import { useState, FormEvent } from 'react'
 import { generateQuiz } from './actions'
 import { QuizQuestion } from '@/types'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 
 export default function Home() {
@@ -26,14 +30,38 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input name="videoId" placeholder="YouTube Video ID" className="text-black text-sm" required />
-        <input name="numQuestions" type="number" min="1" max="15" className="text-black text-sm" required />
-        <button type="submit" disabled={loading}>Generate Quiz</button>
-      </form>
-      {loading && <p>Loading...</p>}
-      {quiz && <pre>{JSON.stringify(quiz, null, 2)}</pre>}
+    <div className="min-h-screen bg-blue p-8">
+        <Card className="max-w-2xl mx-auto bg-white shadow-lg">
+          <CardHeader >
+            <CardTitle className="text-2xl font-bold text-gray">YouTube Quiz Generator</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="videoId">YouTube Video ID</Label>
+                <Input id="videoId" name="videoId" placeholder="Enter YouTube Video ID" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="numQuestions">Number of Questions</Label>
+                <Input id="numQuestions" name="numQuestions" type="number" min="1" max="15" required className="text-black text-sm" />
+              </div>
+              
+              <Button type="submit" disabled={loading} className="w-full bg-limeGreen hover:bg-green text-white">
+              {loading ? 'Generating Quiz...' : 'Generate Quiz'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+           
+      {quiz && (
+        <Card className="mt-8 max-w-2xl mx-auto bg-white shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray">Quiz Questions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <pre>{JSON.stringify(quiz, null, 2)}</pre>
+          </CardContent>
+        </Card>)}
     </div>
   )
 }
