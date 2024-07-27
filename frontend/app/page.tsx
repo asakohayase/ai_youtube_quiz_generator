@@ -15,8 +15,8 @@ export default function Home() {
     try {
       const formData = new FormData(event.currentTarget)
       const videoId = formData.get('videoId') as string
-      const numQuestions = parseInt(formData.get('numQuestions') as string, 10)
-      const data = await generateQuiz(videoId, numQuestions)
+      const num_questions = parseInt(formData.get('numQuestions') as string, 10)
+      const data = await generateQuiz(videoId, num_questions)
       setQuiz(data.quiz)
     } catch (error) {
       console.error('Error:', error)

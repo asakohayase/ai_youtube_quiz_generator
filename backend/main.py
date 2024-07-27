@@ -5,13 +5,19 @@ import tiktoken
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
+import json
+import re
 
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 
+from middleware import add_middleware
+
 load_dotenv()
 
 app = FastAPI()
+
+add_middleware(app)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -28,7 +34,7 @@ class QuizQuestion(BaseModel):
 
 
 class QuizResponse(BaseModel):
-    questions: list[QuizQuestion]
+    quiz: list[QuizQuestion]
 
 
 def get_translated_transcript(video_id, target_language="en"):
@@ -117,20 +123,35 @@ def summarize_text(text):
 
 
 def generate_quiz(summary, num_questions):
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant that creates quiz questions.",
-            },
-            {
-                "role": "user",
-                "content": f"Based on the following summary, create {num_questions} quiz questions with answers. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings), and 'correct_answer' (an integer 0-3 indicating the index of the correct answer in the options list).\n\nSummary: {summary}",
-            },
-        ],
-    )
-    return response.choices[0].message.content
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant that creates quiz questions.",
+                },
+                {
+                    "role": "user",
+                    "content": f"Based on the following summary, create {num_questions} quiz questions with answers. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings), and 'correct_answer' (an integer 0-3 indicating the index of the correct answer in the options list).\n\nSummary: {summary}",
+                },
+            ],
+        )
+        quiz_json = response.choices[0].message.content
+        # Process the response to create a valid JSON array
+        quiz_objects = re.findall(r"\{[^{}]*\}", quiz_json)
+        processed_quiz_json = f"[{','.join(quiz_objects)}]"
+
+        # Validate the processed JSON
+        json.loads(processed_quiz_json)
+
+        return processed_quiz_json
+    except json.JSONDecodeError as e:
+        print(f"Error processing quiz JSON: {str(e)}")
+        raise
+    except Exception as e:
+        print(f"Error in generate_quiz: {str(e)}")
+        raise
 
 
 def get_num_questions():
@@ -147,24 +168,6 @@ def get_num_questions():
             print("Please enter a valid number.")
 
 
-# def main():
-#     video_id = input("Enter the YouTube video ID: ")
-#     transcript = get_translated_transcript(video_id)
-
-#     if transcript:
-#         print("\nTranscript retrieved successfully.")
-#         summary = summarize_text(transcript)
-
-#         num_questions = get_num_questions()
-#         quiz_json = generate_quiz(summary, num_questions)
-#         print("\nGenerated Quiz (in JSON format):")
-#         print(quiz_json)
-
-#         # Note: In a full implementation, you'd parse this JSON and format it nicely for the user
-#     else:
-#         print("Failed to retrieve transcript.")
-
-
 @app.post("/generate-quiz", response_model=QuizResponse)
 async def generate_quiz_endpoint(request: QuizRequest):
     try:
@@ -176,14 +179,15 @@ async def generate_quiz_endpoint(request: QuizRequest):
         quiz_json = generate_quiz(summary, request.num_questions)
 
         # Parse the JSON string into a Python object
-        import json
-
         quiz_data = json.loads(quiz_json)
-
-        # Convert the parsed data into QuizQuestion objects
         quiz_questions = [QuizQuestion(**q) for q in quiz_data]
 
         return QuizResponse(quiz=quiz_questions)
+    except json.JSONDecodeError as e:  # New: Specific exception handling
+        print(f"JSON decode error: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"Error parsing quiz JSON: {str(e)}"
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
