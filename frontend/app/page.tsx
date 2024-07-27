@@ -3,7 +3,7 @@
 import { useState, FormEvent } from 'react'
 import { generateQuiz } from './actions'
 import { QuizQuestion } from '@/types'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -13,6 +13,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 export default function Home() {
   const [quiz, setQuiz] = useState<QuizQuestion[] | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -29,6 +31,18 @@ export default function Home() {
       setLoading(false)
     }
   }
+
+  const handleAnswerChange = (questionIndex: number, answer: string) => {
+    setUserAnswers(prevAnswers => {
+      const newAnswers = [...prevAnswers];
+      newAnswers[questionIndex] = answer;
+      return newAnswers;
+    });
+  };
+
+  const handleQuizSubmit = () => {
+    setShowResults(true);
+  };
 
   return (
     <div className="min-h-screen bg-blue p-8">
@@ -47,7 +61,7 @@ export default function Home() {
                 <Input id="numQuestions" name="numQuestions" type="number" min="1" max="15" required className="text-black text-sm" />
               </div>
               
-              <Button type="submit" disabled={loading} className="w-full bg-limeGreen hover:bg-green text-white">
+              <Button type="submit" disabled={loading} className="w-full bg-limeGreen text-white">
               {loading ? 'Generating Quiz...' : 'Generate Quiz'}
               </Button>
             </form>
@@ -61,22 +75,31 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             {quiz.map((q, index) =>( 
-               <div key={q.question} className="mb-6 p-4 bg-mellow-yellow rounded-lg">
+               <div key={q.question} className="mb-6 p-4 bg-yellow rounded-lg">
                 <h3 className="font-semibold mb-2">{q.question}</h3>
-                <RadioGroup className="space-y-2">
+                <RadioGroup onValueChange={(value) => handleAnswerChange(index, value)} className="space-y-2">
                 {q.options.map((option, optionIndex) => (
                   <div key={optionIndex} className="flex items-center">
-                    <RadioGroupItem value={q.question} id={`q${index}-option${optionIndex}`} />
+                    <RadioGroupItem value={option} id={`q${index}-option${optionIndex}`} />
                     <Label htmlFor={`q${index}-option${optionIndex}`} className="ml-2">{option}</Label>
                   </div>
                 ))}
               </RadioGroup>
-                 <div className="mt-2">
-                    <p>Correct answer: {q.correct_answer}</p>
-                  </div>
+              {showResults&&(
+                <div className="mt-2">
+                  <p className={`font-semibold ${userAnswers[index] === q.correct_answer ? 'text-green' : 'text-pink'}`}>
+                      {userAnswers[index] === q.correct_answer ? 'Correct!' : 'Incorrect'}
+                    </p>
+                  <p>Correct answer: {q.correct_answer}</p>
+                </div>)}
                </div>
               ))}
           </CardContent>
+          <CardFooter>
+            <Button onClick={handleQuizSubmit} className="w-full bg-pink text-white">
+              Check Your Answers
+            </Button>
+          </CardFooter>
         </Card>)}
     </div>
   )
