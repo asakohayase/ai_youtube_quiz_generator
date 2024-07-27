@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 
 export default function Home() {
@@ -56,10 +57,25 @@ export default function Home() {
       {quiz && (
         <Card className="mt-8 max-w-2xl mx-auto bg-white shadow-lg">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-gray">Quiz Questions</CardTitle>
+            <CardTitle className="text-xl font-bold text-gray">Quiz Time! : Show What You Learned ⭐</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre>{JSON.stringify(quiz, null, 2)}</pre>
+            {quiz.map((q, index) =>( 
+               <div key={q.question} className="mb-6 p-4 bg-mellow-yellow rounded-lg">
+                <h3 className="font-semibold mb-2">{q.question}</h3>
+                <RadioGroup className="space-y-2">
+                {q.options.map((option, optionIndex) => (
+                  <div key={optionIndex} className="flex items-center">
+                    <RadioGroupItem value={q.question} id={`q${index}-option${optionIndex}`} />
+                    <Label htmlFor={`q${index}-option${optionIndex}`} className="ml-2">{option}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+                 <div className="mt-2">
+                    <p>Correct answer: {q.correct_answer}</p>
+                  </div>
+               </div>
+              ))}
           </CardContent>
         </Card>)}
     </div>
