@@ -63,9 +63,19 @@ To get a local copy up and running follow these simple example steps.
    ```
 
 ### Usage
-To use the application, run the .py files:
+
+Backend:
+To run the backend application, use the following command:
+
+  ```sh
+  python main.py
+  ```
+
+Frontend:
+To start the frontend development server, run the following command in your terminal:
+
    ```sh
-   python main.py
+   npm run dev
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
