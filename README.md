@@ -1,6 +1,6 @@
 <a name="readme-top"></a>
 
-<h1>Youtube Quiz Generator</h1>
+<h1>AI Youtube Quiz Generator</h1>
 
 <div align="left">
   <p>
