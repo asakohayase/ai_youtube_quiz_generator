@@ -40,7 +40,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Installation
 
-1. Get API Keys at the following websites
+1. Get API Key at the following website
    * [https://platform.openai.com/](https://platform.openai.com/)
    
 2. Clone the repo
