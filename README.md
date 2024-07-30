@@ -53,7 +53,7 @@ To get a local copy up and running follow these simple example steps.
    ```
    You have to install poetry if not already installed.
    
-4. Enter your API keys in `.env`
+4. Enter your API key in `.env`
    ```js
    GROQ_API_KEY='ENTER YOUR API';
    ```
