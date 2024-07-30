@@ -120,7 +120,6 @@ def summarize_text(text):
             max_tokens=200,
         )
         summaries.append(response.choices[0].message.content)
-        print(summaries)
 
     return " ".join(summaries)
 
