@@ -41,11 +41,11 @@ To get a local copy up and running follow these simple example steps.
 ### Installation
 
 1. Get API Key at the following website
-   * [https://platform.openai.com/](https://platform.openai.com/)
+   * [https://platform.openai.com/](https://groq.com/)](https://groq.com/)
    
 2. Clone the repo
    ```sh
-   git clone https://github.com/asakohayase/youtube_quiz_generator
+   git clone https://github.com/asakohayase/ai_youtube_quiz_generator
    ```
 3. Install packages
    ```sh
@@ -55,7 +55,7 @@ To get a local copy up and running follow these simple example steps.
    
 4. Enter your API keys in `.env`
    ```js
-   OPENAI_API_KEY='ENTER YOUR API';
+   GROQ_API_KEY='ENTER YOUR API';
    ```
 5. Activate the virtual environment
    ```sh
@@ -86,7 +86,6 @@ To start the frontend development server, run the following command in your term
 ## Roadmap
  <ol>
     <li>Support Other Languages</li>
-    <li>Support Other LLM Models</li>
  </ol>
 
 
