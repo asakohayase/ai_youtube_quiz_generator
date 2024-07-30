@@ -85,7 +85,7 @@ To start the frontend development server, run the following command in your term
 <!-- ACKNOWLEDGMENTS -->
 ## Roadmap
  <ol>
-    <li>Support Other Languages</li>
+    <li>Support Other Languages Than English</li>
  </ol>
 
 
