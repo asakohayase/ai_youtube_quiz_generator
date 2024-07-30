@@ -18,6 +18,7 @@ tiktoken = "^0.7.0"
 fastapi = "^0.111.1"
 uvicorn = "^0.30.3"
 youtube-transcript-api = "^0.6.2"
+groq = "^0.9.0"
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 useLibraryCodeForTypes = true

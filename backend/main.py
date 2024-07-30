@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+from groq import Groq
 import tiktoken
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -19,7 +19,7 @@ app = FastAPI()
 
 add_middleware(app)
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
 class QuizRequest(BaseModel):
@@ -106,7 +106,7 @@ def summarize_text(text):
 
     for chunk in chunks:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="llama3-groq-70b-8192-tool-use-preview",
             messages=[
                 {
                     "role": "system",
@@ -117,8 +117,10 @@ def summarize_text(text):
                     "content": f"Summarize the following text in about 150 words:\n\n{chunk}",
                 },
             ],
+            max_tokens=200,
         )
         summaries.append(response.choices[0].message.content)
+        print(summaries)
 
     return " ".join(summaries)
 
@@ -126,7 +128,7 @@ def summarize_text(text):
 def generate_quiz(summary, num_questions):
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="llama3-groq-70b-8192-tool-use-preview",
             messages=[
                 {
                     "role": "system",
@@ -134,9 +136,10 @@ def generate_quiz(summary, num_questions):
                 },
                 {
                     "role": "user",
-                    "content": f"Based on the following summary, create {num_questions} quiz questions with answers and explanations. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings),'correct_answer' (the description of the correct answer) , and 'explanation' (an explanation of why the answer is correct).\n\nSummary: {summary}",
+                    "content": f"Based on the following summary, create {num_questions} quiz questions with answers and explanations. Each question should be multiple choice with 4 options. Format your response as JSON with keys 'question', 'options' (a list of 4 strings with numbered indices, e.g., ['1. Option A', '2. Option B', '3. Option C', '4. Option D']), 'correct_answer' (the full text of the correct answer including its number), and 'explanation' (an explanation of why the answer is correct).\n\nSummary: {summary}",
                 },
             ],
+            max_tokens=1000,
         )
         quiz_json = response.choices[0].message.content
         # Process the response to create a valid JSON array
@@ -144,9 +147,22 @@ def generate_quiz(summary, num_questions):
         processed_quiz_json = f"[{','.join(quiz_objects)}]"
 
         # Validate the processed JSON
-        json.loads(processed_quiz_json)
+        quiz_data = json.loads(processed_quiz_json)
 
-        return processed_quiz_json
+        # Ensure all options are properly numbered
+        for question in quiz_data:
+            for i, option in enumerate(question["options"], start=1):
+                if not option.startswith(f"{i}. "):
+                    question["options"][i - 1] = f"{i}. {option}"
+
+            # Ensure correct_answer starts with its number
+            correct_index = question["options"].index(question["correct_answer"])
+            if not question["correct_answer"].startswith(f"{correct_index + 1}. "):
+                question["correct_answer"] = (
+                    f"{correct_index + 1}. {question['correct_answer']}"
+                )
+
+        return json.dumps(quiz_data)
     except json.JSONDecodeError as e:
         print(f"Error processing quiz JSON: {str(e)}")
         raise
