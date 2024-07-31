@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from openai import OpenAI
 from groq import Groq
 import tiktoken
 from fastapi import FastAPI, HTTPException
@@ -19,7 +20,8 @@ app = FastAPI()
 
 add_middleware(app)
 
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
 class QuizRequest(BaseModel):
@@ -106,7 +108,8 @@ def summarize_text(text):
 
     for chunk in chunks:
         response = client.chat.completions.create(
-            model="llama3-groq-70b-8192-tool-use-preview",
+            model="gpt-3.5-turbo",
+            # model="llama3-groq-70b-8192-tool-use-preview",
             messages=[
                 {
                     "role": "system",
@@ -127,7 +130,8 @@ def summarize_text(text):
 def generate_quiz(summary, num_questions):
     try:
         response = client.chat.completions.create(
-            model="llama3-groq-70b-8192-tool-use-preview",
+            model="gpt-3.5-turbo",
+            # model="llama3-groq-70b-8192-tool-use-preview",
             messages=[
                 {
                     "role": "system",
