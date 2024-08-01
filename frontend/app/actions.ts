@@ -4,8 +4,8 @@ import { QuizResponse } from "@/types";
 
 export async function generateQuiz(videoId: string, numQuestions: number): Promise<QuizResponse> {
   try {
-    console.log('Sending request with:', { video_id: videoId, num_questions: numQuestions });
-    const response = await fetch('http://127.0.0.1:8000/generate-quiz', {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL||"";
+    const response = await fetch(`${API_URL}/generate-quiz`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ video_id:videoId, num_questions:numQuestions }),
