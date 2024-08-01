@@ -41,7 +41,7 @@ To get a local copy up and running follow these simple example steps.
 ### Installation
 
 1. Get API Key at the following website
-   * [https://groq.com/](https://groq.com/)
+   * [https://openai.com/api/](https://openai.com/api/)
    
 2. Clone the repo
    ```sh
@@ -55,7 +55,7 @@ To get a local copy up and running follow these simple example steps.
    
 4. Enter your API key in `.env`
    ```js
-   GROQ_API_KEY='ENTER YOUR API';
+   OPENAI_API_KEY='ENTER YOUR API';
    ```
 5. Activate the virtual environment
    ```sh
