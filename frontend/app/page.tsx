@@ -11,42 +11,43 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 
 export default function Home() {
-  const [quiz, setQuiz] = useState<QuizQuestion[] | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  const [showResults, setShowResults] = useState<boolean>(false);
+  // const [quiz, setQuiz] = useState<QuizQuestion[] | null>(null)
+  // const [loading, setLoading] = useState<boolean>(false)
+  // const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  // const [showResults, setShowResults] = useState<boolean>(false);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setLoading(true)
-    try {
-      const formData = new FormData(event.currentTarget)
-      const videoId = formData.get('videoId') as string
-      const num_questions = parseInt(formData.get('numQuestions') as string, 10)
-      const data = await generateQuiz(videoId, num_questions)
-      setQuiz(data.quiz)
-    } catch (error) {
-      console.error('Error:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+  //   setLoading(true)
+  //   try {
+  //     const formData = new FormData(event.currentTarget)
+  //     const videoId = formData.get('videoId') as string
+  //     const num_questions = parseInt(formData.get('numQuestions') as string, 10)
+  //     const data = await generateQuiz(videoId, num_questions)
+  //     setQuiz(data.quiz)
+  //   } catch (error) {
+  //     console.error('Error:', error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
-  const handleAnswerChange = (questionIndex: number, answer: string) => {
-    setUserAnswers(prevAnswers => {
-      const newAnswers = [...prevAnswers];
-      newAnswers[questionIndex] = answer;
-      return newAnswers;
-    });
-  };
+  // const handleAnswerChange = (questionIndex: number, answer: string) => {
+  //   setUserAnswers(prevAnswers => {
+  //     const newAnswers = [...prevAnswers];
+  //     newAnswers[questionIndex] = answer;
+  //     return newAnswers;
+  //   });
+  // };
 
-  const handleQuizSubmit = () => {
-    setShowResults(true);
-  };
+  // const handleQuizSubmit = () => {
+  //   setShowResults(true);
+  // };
 
   return (
-    <div className="min-h-screen bg-blue p-8">
-        <Card className="max-w-2xl mx-auto bg-white shadow-lg">
+    <div className="min-h-screen bg-blue p-8 text-black">
+      Hello world
+        {/* <Card className="max-w-2xl mx-auto bg-white shadow-lg">
           <CardHeader >
             <CardTitle className="text-2xl font-bold text-gray">YouTube Quiz Generator</CardTitle>
           </CardHeader>
@@ -101,7 +102,7 @@ export default function Home() {
               Check Your Answers
             </Button>
           </CardFooter>
-        </Card>)}
+        </Card>)} */}
     </div>
   )
 }
