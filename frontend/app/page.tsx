@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
-import { generateQuiz } from './actions'
-import { QuizQuestion } from '@/types'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+// import { useState, FormEvent } from 'react'
+// import { generateQuiz } from './actions'
+// import { QuizQuestion } from '@/types'
+// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+// import { Label } from '@/components/ui/label'
+// import { Input } from '@/components/ui/input'
+// import { Button } from '@/components/ui/button'
+// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 
 export default function Home() {
