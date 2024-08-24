@@ -1,55 +1,54 @@
 'use client'
 
-// import { useState, FormEvent } from 'react'
-// import { generateQuiz } from './actions'
-// import { QuizQuestion } from '@/types'
-// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-// import { Label } from '@/components/ui/label'
-// import { Input } from '@/components/ui/input'
-// import { Button } from '@/components/ui/button'
-// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { useState, FormEvent } from 'react'
+import { generateQuiz } from './actions'
+import { QuizQuestion } from '@/types'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 
 export default function Home() {
-  // const [quiz, setQuiz] = useState<QuizQuestion[] | null>(null)
-  // const [loading, setLoading] = useState<boolean>(false)
-  // const [userAnswers, setUserAnswers] = useState<string[]>([]);
-  // const [showResults, setShowResults] = useState<boolean>(false);
+  const [quiz, setQuiz] = useState<QuizQuestion[] | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const [showResults, setShowResults] = useState<boolean>(false);
 
-  // const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault()
-  //   setLoading(true)
-  //   try {
-  //     const formData = new FormData(event.currentTarget)
-  //     const videoId = formData.get('videoId') as string
-  //     const num_questions = parseInt(formData.get('numQuestions') as string, 10)
-  //     const data = await generateQuiz(videoId, num_questions)
-  //     setQuiz(data.quiz)
-  //   } catch (error) {
-  //     console.error('Error:', error)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setLoading(true)
+    try {
+      const formData = new FormData(event.currentTarget)
+      const videoId = formData.get('videoId') as string
+      const numQuestions = parseInt(formData.get('numQuestions') as string, 10)
+      const data = await generateQuiz(videoId, numQuestions)
+      setQuiz(data.quiz)
+    } catch (error) {
+      console.error('Error:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  // const handleAnswerChange = (questionIndex: number, answer: string) => {
-  //   setUserAnswers(prevAnswers => {
-  //     const newAnswers = [...prevAnswers];
-  //     newAnswers[questionIndex] = answer;
-  //     return newAnswers;
-  //   });
-  // };
+  const handleAnswerChange = (questionIndex: number, answer: string) => {
+    setUserAnswers(prevAnswers => {
+      const newAnswers = [...prevAnswers];
+      newAnswers[questionIndex] = answer;
+      return newAnswers;
+    });
+  };
 
-  // const handleQuizSubmit = () => {
-  //   setShowResults(true);
-  // };
+  const handleQuizSubmit = () => {
+    setShowResults(true);
+  };
 
   return (
-    <div className="min-h-screen bg-blue p-8 text-black">
-      Hello world
-        {/* <Card className="max-w-2xl mx-auto bg-white shadow-lg">
+    <div className="bg-blue min-h-screen p-8 text-black">
+        <Card className="mx-auto max-w-2xl bg-white shadow-lg">
           <CardHeader >
-            <CardTitle className="text-2xl font-bold text-gray">YouTube Quiz Generator</CardTitle>
+            <CardTitle className="text-gray text-2xl font-bold">YouTube Quiz Generator</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -62,7 +61,7 @@ export default function Home() {
                 <Input id="numQuestions" name="numQuestions" type="number" min="1" max="15" required className="text-gray text-sm" />
               </div>
               
-              <Button type="submit" disabled={loading} className="w-full bg-limeGreen text-white">
+              <Button type="submit" disabled={loading} className="bg-limeGreen w-full text-white">
               {loading ? 'Generating Quiz...' : 'Generate Quiz'}
               </Button>
             </form>
@@ -102,7 +101,7 @@ export default function Home() {
               Check Your Answers
             </Button>
           </CardFooter>
-        </Card>)} */}
+        </Card>)}
     </div>
   )
 }
