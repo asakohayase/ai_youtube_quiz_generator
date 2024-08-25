@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "youtube_quiz_generator"
+name = "backend"
 version = "0.1.0"
-description = "Youtube Quiz Generator"
+description = "Youtube Quiz Generator Backend"
 authors = ["Asako Hayase"]
 
 [tool.poetry.dependencies]
@@ -11,7 +11,7 @@ unstructured = '==0.10.25'
 #Access weather data
 pyowm = '3.3.0'
 tools = "^0.1.9"
-python-dotenv = "1.0.0"
+python-dotenv = "^1.0.1"
 
 #For type error check
 tiktoken = "^0.7.0"
