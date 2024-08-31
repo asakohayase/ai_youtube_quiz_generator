@@ -42,6 +42,7 @@ def get_translated_transcript(video_id, target_language="en"):
     try:
         # List all available transcripts
         transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
+        print(f"Available transcripts: {transcript_list}")
 
         # Try to find a transcript in the target language
         transcript = None
@@ -58,6 +59,7 @@ def get_translated_transcript(video_id, target_language="en"):
                     transcript = transcript_item.translate(target_language)
                     break
                 except Exception as e:
+                    print(f"Error translating transcript: {e}")
                     continue
 
         if transcript:
@@ -199,7 +201,7 @@ async def generate_quiz_endpoint(request: QuizRequest):
         quiz_questions = [QuizQuestion(**q) for q in quiz_data]
 
         return QuizResponse(quiz=quiz_questions)
-    except json.JSONDecodeError as e:
+    except json.JSONDecodeError as e:  # New: Specific exception handling
         print(f"JSON decode error: {str(e)}")
         raise HTTPException(
             status_code=500, detail=f"Error parsing quiz JSON: {str(e)}"
