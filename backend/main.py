@@ -179,7 +179,7 @@ def get_num_questions():
             if 1 <= num_questions <= 15:
                 return num_questions
             else:
-                print("Please enter a number between 1 and 30.")
+                print("Please enter a number between 1 and 15.")
         except ValueError:
             print("Please enter a valid number.")
 
@@ -199,7 +199,7 @@ async def generate_quiz_endpoint(request: QuizRequest):
         quiz_questions = [QuizQuestion(**q) for q in quiz_data]
 
         return QuizResponse(quiz=quiz_questions)
-    except json.JSONDecodeError as e:  # New: Specific exception handling
+    except json.JSONDecodeError as e:
         print(f"JSON decode error: {str(e)}")
         raise HTTPException(
             status_code=500, detail=f"Error parsing quiz JSON: {str(e)}"
